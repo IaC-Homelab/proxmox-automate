@@ -39,6 +39,7 @@ terraform apply
 # 5. Connect
 terraform output ssh_commands
 ```
+<br>
 
 ## Destroying VMs 🧨
 ```bash
