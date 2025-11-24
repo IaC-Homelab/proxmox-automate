@@ -18,7 +18,7 @@ Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest)
 - `providers.tf` – Terraform + Proxmox provider config 🔌
 - `outputs.tf` – outputs like VM IPs and SSH commands 📤
 - Ignore `terraform.tfstate` and friends; Terraform owns those. 🗃️
-
+<br><br>
 
 ## Quick start 🚀
 ```bash
