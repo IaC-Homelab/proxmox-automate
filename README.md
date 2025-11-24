@@ -4,11 +4,11 @@ Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest)
 
 
 ## What this repo does ⚙️
-- 📥 **Downloads** an **Ubuntu cloud image** to each Proxmox node
+- 📥 **Downloads** a **Ubuntu cloud image** to each Proxmox node
 - 📄 Creates **Cloud-Init snippets** per node (user, SSH key, packages, etc.)
 - 🖥️ Boots VMs with **static IPs**
 - 🔑 Prints ready-to-paste SSH commands!
-
+<br><br>
 
 ## Layout 🗂️
 - `main.tf` – entrypoint, wires the module 🧵
@@ -20,7 +20,7 @@ Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest)
 - Ignore `terraform.tfstate` and friends; Terraform owns those. 🗃️
 
 
-Quick start 🚀
+## Quick start 🚀
 ```bash
 # 1. Copy and edit vars
 cp terraform.tfvars.example terraform.tfvars
@@ -45,6 +45,6 @@ terraform output ssh_commands
 # Delete all VMs
 terraform apply -var='vms={}' -auto-approve
 ```
-
+<br>
 Happy VM farming 🖥️🌱🐧
 
