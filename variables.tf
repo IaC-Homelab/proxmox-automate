@@ -1,96 +1,84 @@
-# ==== Proxmox connection ====
-variable "endpoint" {
-  description = "Proxmox API endpoint (https://host:8006/)"
+# https://192.168.1.30:8006/api2/json
+variable "proxmox_api_url" {
   type        = string
+  description = "Proxmox API URL, e.g. https://pve1:8006/api2/json"
 }
 
-variable "api_token" {
-  description = "Proxmox API token in full form: user@realm!token=<uuid>"
+variable "proxmox_api_token_id" {
   type        = string
+  description = "Proxmox API token ID, e.g. terraform@pam!token-name"
+}
+
+variable "proxmox_api_token_secret" {
+  type        = string
+  description = "Proxmox API token secret"
   sensitive   = true
 }
 
-variable "insecure" {
-  description = "Allow insecure TLS"
+variable "proxmox_tls_insecure" {
   type        = bool
+  description = "Allow insecure TLS (self-signed certs)"
   default     = true
 }
 
-# ==== SSH connection to Proxmox host ====
-variable "ssh_username" {
-  type    = string
-  default = "root"
-}
-
-variable "ssh_use_agent" {
-  type    = bool
-  default = true
-}
-
-variable "ssh_password" {
-  type      = string
-  default   = ""
-  sensitive = true
-}
-
-# ==== VM creation ====
-variable "image_url" {
-  description = "Cloud image URL"
+variable "vm_template" {
   type        = string
-  default     = "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img"
+  description = "Name of the Proxmox cloud-init template to clone from"
 }
 
-variable "image_file_name" {
-  description = "Filename to store the downloaded image as"
+variable "disk_storage" {
   type        = string
-  default     = "ubuntu-24.04-noble.img"
+  description = "Proxmox storage name for VM disks"
+  default     = "local-lvm"
 }
 
-variable "datastore_image" {
-  type    = string
-  default = "local"
-}
-
-variable "datastore_vm" {
-  type    = string
-  default = "local-lvm"
-}
-
-variable "default_bridge" {
-  type    = string
-  default = "vmbr0"
-}
-
-# ---- Cloud-init user ----
-variable "ci_username" {
-  description = "Username for the cloud-init user"
+variable "cloudinit_cdrom_storage" {
   type        = string
+  description = "Storage to use for the cloud-init CD-ROM"
+  default     = "local-lvm"
 }
 
-variable "ci_password" {
-  description = "Password for cloud-init user"
+variable "network_bridge" {
   type        = string
-  sensitive   = true
+  description = "Default bridge to attach VMs to"
+  default     = "vmbr0"
 }
 
-variable "ci_ssh_key" {
-  description = "Path to a public key to inject"
+variable "network_cidr_suffix" {
+  type        = number
+  description = "CIDR suffix for network, e.g. 24"
+  default     = 24
+}
+
+variable "network_gateway" {
   type        = string
-  default     = "~/.ssh/id_ed25519.pub"
+  description = "Default gateway IP address"
 }
 
-# One VM per entry (key = VM name)
+variable "ssh_user" {
+  type        = string
+  description = "Default SSH / cloud-init user"
+  default     = "ubuntu"
+}
+
+variable "ssh_public_key" {
+  type        = string
+  description = "SSH public key injected via cloud-init"
+}
+
+variable "cicustom" {
+  type        = string
+  description = "Optional cicustom string for extra cloud-init (e.g. vendor=local:snippets/ci-custom.yml)"
+  default     = null
+}
+
 variable "vms" {
-  description = "Map of per-VM configs"
+  description = "Map of VMs to create"
   type = map(object({
-    node_name = string
-    vm_id     = number
-    cores     = number
-    memory_mb = number
-    disk_gb   = number
-    bridge    = optional(string)
-    ip_cidr   = optional(string) # "dhcp" or "x.x.x.x/nn"
-    gateway   = optional(string)
-    datastore = optional(string) # override for boot disk
+    node        = string
+    cores       = number
+    memory_mb   = number
+    disk_gb     = number
+    ip_address  = string
   }))
 }
