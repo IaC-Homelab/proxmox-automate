@@ -4,6 +4,7 @@ variable "proxmox_api_url" {
   description = "Proxmox API URL, e.g. https://pve1:8006/api2/json"
 }
 
+# root@pam!ansible
 variable "proxmox_api_token_id" {
   type        = string
   description = "Proxmox API token ID, e.g. terraform@pam!token-name"
