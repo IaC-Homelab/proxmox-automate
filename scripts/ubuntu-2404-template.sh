@@ -45,8 +45,8 @@ qm set "$VMID" --serial0 socket --vga serial0
 
 # Optional: default cloud-init values (you can override per-VM later)
 qm set "$VMID" \
-  --ciuser ubuntu \
-  --cipassword 'changeme' \
+  --ciuser admin \
+  --cipassword 'Subedi10!' \
   --sshkeys /root/.ssh/id_rsa.pub
 
 # ----- Make VM a template -----
