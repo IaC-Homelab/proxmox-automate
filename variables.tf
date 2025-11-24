@@ -65,6 +65,7 @@ variable "default_bridge" {
 variable "ci_username" {
   description = "Username for the cloud-init user"
   type        = string
+  default     = "ubuntu"
 }
 
 variable "ci_password" {

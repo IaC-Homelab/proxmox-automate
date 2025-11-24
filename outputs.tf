@@ -1,4 +1,4 @@
-output "vm_ipv4" {
-  description = "First IPv4 reported by guest agent per VM"
-  value       = module.create_vms.vm_ipv4
+output "ssh_commands" {
+  description = "SSH commands for all VMs"
+  value       = module.create_vms.ssh_commands
 }

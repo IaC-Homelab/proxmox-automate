@@ -1,34 +1,50 @@
-# proxmox-deploy
-Declarative Terraform repository to deploy Proxmox VMs for my homelab
-Provision Proxmox VMs with Cloud‑Init via the bpg/proxmox providers.
+# proxmox-automate 🛰️
+Terraform configs to spin up configured Proxmox VMs with Cloud-Init. Declarative VMs, repeatable builds, no more clicky-clicky in the UI 🖱️❌<br><br>
+Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest) provider. 🧩
 
-## Getting started
 
-Edit the variables in terraform.tfvars to get the project working.
+## What this repo does ⚙️
+- 📥 **Downloads** an **Ubuntu cloud image** to each Proxmox node
+- 📄 Creates **Cloud-Init snippets** per node (user, SSH key, packages, etc.)
+- 🖥️ Boots VMs with **static IPs**
+- 🔑 Prints ready-to-paste SSH commands!
 
-### Project Structure
 
-* `main.tf` - starting point/logic
-* `variables.tf` - initializes variables
-* `terraform.tfvars` - defines variables (prompts for any not defined)
-* `providers.tf` - defines plugins/modules and version restrictions
-* `outputs.tf` - defines output variables which can be passed to other modules
-* `terraform.tfstate` - terraforms local cache of your infrastructure's current state
+## Layout 🗂️
+- `main.tf` – entrypoint, wires the module 🧵
+- `modules/create_vms` – all the VM + cloud-init logic 🧠
+- `variables.tf` – input variables ⚙️
+- `terraform.tfvars` – your environment-specific values 🌎
+- `providers.tf` – Terraform + Proxmox provider config 🔌
+- `outputs.tf` – outputs like VM IPs and SSH commands 📤
+- Ignore `terraform.tfstate` and friends; Terraform owns those. 🗃️
 
-## To Do
 
-- [x] ssh keys + password working
-- [ ] Configure a second disk for rook-ceph to take over on each VM
-- [ ] Make the variables.tf more robust
+Quick start 🚀
+```bash
+# 1. Copy and edit vars
+cp terraform.tfvars.example terraform.tfvars
 
-## Deployment
+# 2. Initialize
+terraform fmt -recursive
+terraform init
+terraform validate
 
-1. Copy `terraform.tfvars.example` to `terraform.tfvars` and fill it out.
-2. `terraform fmt -recursive` - ensure everthing is formated correctly.
-3. `terraform init` - initialization
-4. `terraform validate`
-5. `terraform plan` - inspect for errors before applying
-6. `terraform apply` - build infrastructure
+# 3. Plan (dry run)
+terraform plan
 
-Destroy all VMs
-`terraform apply -var='vms={}' -auto-approve`
+# 4. Deploy
+terraform apply
+
+# 5. Connect
+terraform output ssh_commands
+```
+
+## Destroying VMs 🧨
+```bash
+# Delete all VMs
+terraform apply -var='vms={}' -auto-approve
+```
+
+Happy VM farming 🖥️🌱🐧
+

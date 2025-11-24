@@ -12,41 +12,12 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
 
   source_raw {
     file_name = "cloud-init-${each.value}.yaml"
-    data      = <<-EOF
-      #cloud-config
-      hostname: ${each.value}-vm
-      timezone: America/New_York
-      ssh_pwauth: true
-      
-      users:
-        - defaut
-        - name: ${var.ci_username}
-          groups: 
-            - sudo
-          shell: /bin/bash
-          ssh_authorized_keys:
-            - ${var.ci_ssh_key}
-          sudo: ALL=(ALL) NOPASSWD:ALL
-          lock_passwd: false
-
-      chpasswd:
-        list: |
-          ${var.ci_username}:${var.ci_password}
-        expire: False
-
-      package_update: true
-      package_upgrade: true
-      packages:
-        - qemu-guest-agent
-        - net-tools
-        - curl
-      
-      runcmd:
-        - sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
-        - systemctl restart sshd
-        - systemctl enable --now qemu-guest-agent
-        - echo "done" > /tmp/cloud-config.done
-      EOF
+    data = templatefile("${path.module}/templates/cloudinit.yaml", {
+      hostname    = "${each.value}-vm"
+      ci_username = var.ci_username
+      ci_password = var.ci_password
+      ci_ssh_key  = var.ci_ssh_key
+    })
   }
 }
 
@@ -64,7 +35,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   agent {
     enabled = true
     type    = "virtio"
-    timeout = "20s"
+    timeout = "2m"
   }
   serial_device {
     device = "socket"

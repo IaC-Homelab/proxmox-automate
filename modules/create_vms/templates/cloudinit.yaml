@@ -1,0 +1,30 @@
+#cloud-config
+hostname: ${hostname}
+timezone: America/New_York
+ssh_pwauth: true
+
+users:
+  - name: ${ci_username}
+    groups: sudo
+    shell: /bin/bash
+    lock_passwd: false
+    ssh_authorized_keys:
+      - ${ci_ssh_key}
+
+chpasswd:
+  list: |
+    ${ci_username}:${ci_password}
+  expire: false
+
+package_update: true
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+  - net-tools
+  - curl
+
+runcmd:
+  - sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - systemctl enable --now qemu-guest-agent
+  - echo "done" > /tmp/cloud-config.done
