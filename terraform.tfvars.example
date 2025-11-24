@@ -1,0 +1,44 @@
+proxmox_api_url          = "https://pve1:8006/api2/json"
+proxmox_api_token_id     = "terraform@pam!iac-homelab"
+proxmox_api_token_secret = "changeme"
+proxmox_tls_insecure     = true
+
+vm_template = "cloudinit-template"
+
+disk_storage             = "local-lvm"
+cloudinit_cdrom_storage  = "local-lvm"
+network_bridge           = "vmbr0"
+network_cidr_suffix      = 24
+network_gateway          = "192.168.10.1"
+
+ssh_user       = "ubuntu"
+ssh_public_key = "ssh-ed25519 AAAA... your-key-here"
+
+# Optional: extra cloud-init snippet on Proxmox
+# cicustom = "vendor=local:snippets/ci-custom.yml"
+
+vms = {
+  "k3s-master-01" = {
+    node       = "pve1"
+    cores      = 4
+    memory_mb  = 8192
+    disk_gb    = 40
+    ip_address = "192.168.10.11"
+  }
+
+  "k3s-worker-01" = {
+    node       = "pve2"
+    cores      = 4
+    memory_mb  = 8192
+    disk_gb    = 40
+    ip_address = "192.168.10.21"
+  }
+
+  "k3s-worker-02" = {
+    node       = "pve3"
+    cores      = 4
+    memory_mb  = 8192
+    disk_gb    = 40
+    ip_address = "192.168.10.22"
+  }
+}
