@@ -1,6 +1,6 @@
 # proxmox-automate 🛰️
 Terraform configs to spin up configured Proxmox VMs with Cloud-Init. Declarative VMs, repeatable builds, no more clicky-clicky in the UI 🖱️❌<br><br>
-Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest) provider. 🧩
+Uses [`bpg/proxmox`](https://registry.terraform.io/providers/bpg/proxmox/latest) provider. 🧩 <br><br>
 
 
 ## What this repo does ⚙️
